@@ -1,98 +1,117 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image } from 'react-native';
+import { useFonts } from 'expo-font';
+import { Tabs, useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+export default function App() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-export default function HomeScreen() {
+  const [fontsLoaded] = useFonts({
+    'AmaticSC': require('../assets/fonts/AmaticSC.ttf'),
+    'PEduCursive': require('../assets/fonts/EduCursive.ttf'),
+    'Libertinus': require('../assets/fonts/LibertinusSans.ttf'),
+    'UbuntuM': require('../assets/fonts/UbuntuMedium.ttf'),
+  });
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const loadTheme = async () => {
+      const savedTheme = await AsyncStorage.getItem('global-theme');
+      if (savedTheme === 'dark') setIsDarkMode(true);
+    };
+    loadTheme();
+  }, []);
+
+  const handleEnterApp = () => {
+    router.push('/library'); 
+  };
+
+  if (!fontsLoaded) {
+    return null; 
+  }
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <View style={[styles.container, isDarkMode && styles.containerDark]}>
+      <Tabs.Screen 
+        options={{ 
+          headerShown: false,
+          tabBarStyle: { display: 'none' } 
+        }} 
+      />
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      <Image
+        source={require('../assets/images/initial_splashscreen.png')}
+        style={styles.logo}
+      />
+
+      <Text style={[styles.titleText, isDarkMode && styles.textDark]}>読READER</Text>
+
+      <Text style={[styles.subtitleText, isDarkMode && styles.textDarkSecondary]}>
+        This app is designed to use a local AI model to help you search for contextual clues to better understand the content you consume!
+      </Text>
+      
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={isDarkMode ? "#121212" : "#EAE8E3"} />
+
+      <TouchableOpacity 
+        style={styles.button} 
+        onPress={handleEnterApp}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.buttonText}>Tap Here!</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: '#EAE8E3', 
+    justifyContent: 'center',
+    alignItems: 'center', 
+    paddingBottom: 140,
+    paddingTop: 50,
   },
-  stepContainer: {
-    gap: 8,
+  containerDark: {
+    backgroundColor: '#121212',
+  },
+  logo: {
+    width: 400,
+    height: 400,
+    marginBottom: 30, 
+  },
+  titleText: {
+    fontFamily: 'Libertinus',
+    fontSize: 42,
+    color: '#333333', 
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  textDark: {
+    color: '#E0E0E0',
+  },
+  subtitleText: {
+    fontFamily: 'PEduCursive', 
+    fontSize: 12,
+    color: '#6B6E62', 
+    paddingHorizontal: 40,
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  textDarkSecondary: {
+    color: '#A0A0A0',
+  },
+  button: {
+    backgroundColor: '#b8c9ce',
+    paddingVertical: 16,
+    paddingHorizontal: 108,
+    borderRadius: 4,
+    marginTop: 30,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontFamily: 'Libertinus'
   },
 });

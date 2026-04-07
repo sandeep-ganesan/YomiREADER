@@ -1,50 +1,52 @@
-# Welcome to your Expo app 👋
+# Offline AI EPUB Reader
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A minimalist React Native application for reading EPUB files and conversing with an on-device AI assistant—completely offline.
 
-## Get started
+The application eliminates reliance on cloud APIs by running large language models (LLMs) and vector retrieval systems directly on mobile hardware, ensuring privacy and zero operational costs.
 
-1. Install dependencies
+## Features
+
+* **On-Device RAG:** Local Retrieval-Augmented Generation for book-specific chatting.
+* **Vector Caching:** Optimized local storage for book embeddings.
+* **Neighborhood Retrieval:** Context-aware search that captures surrounding story flow.
+* **Native C++ Engine:** Powered by `llama.rn` for high-performance inference.
+* **Reader Core:** Custom themes, typography settings, and gesture-based navigation.
+
+## Technical Architecture
+
+To maintain performance on mobile hardware, the system follows a specific pipeline:
+
+1. **Extraction:** The EPUB is unzipped and cleaned into 300-word text chunks.
+2. **Embedding:** Chunks are processed via Nomic Embed Text v1.5 into mathematical vectors.
+3. **Retrieval:** User queries trigger a cosine similarity search to find relevant book segments.
+4. **Generation:** Meta Llama 3.2 3B processes the retrieved segments to generate a grounded response.
+
+## Tech Stack
+
+* **Framework:** React Native / Expo (Custom Development Client)
+* **Inference:** `llama.rn` (llama.cpp bindings)
+* **Models:** Llama 3.2 3B Instruct & Nomic Embed v1.5 (GGUF Q4_K_M)
+* **Parser:** `@epubjs-react-native/core`, `jszip`
+* **Storage:** `expo-file-system`, `AsyncStorage`
+
+## Installation
+
+This project requires a native build environment and cannot run in the standard Expo Go app.
+
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/username/offline-ai-reader.git](https://github.com/username/offline-ai-reader.git)
+   cd offline-ai-reader
+   ```
+2. Install dependencies:
 
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. Compile the native Android application:
    ```bash
-   npx expo start
+   npx expo run:android
    ```
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+> **Note:** On the initial use of the "Ask AI" feature, the application will download approximately 2.2GB of model weights to the device's local storage. This requires a stable internet connection. Once downloaded, all AI processing is performed 100% offline.
