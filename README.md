@@ -1,4 +1,4 @@
-# Offline AI EPUB Reader
+# 読READER
 
 A minimalist React Native application for reading EPUB files and conversing with an on-device AI assistant—completely offline.
 
