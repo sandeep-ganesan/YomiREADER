@@ -14,7 +14,7 @@ The application eliminates reliance on cloud APIs by running large language mode
 
 ## Screenshots
 
-| <img src="assets/a1.png" width="200"/> | <img src="assets/a2.png" width="200"/> | <img src="assets/a3.png" width="200"/> |
+| <img src="a1.png" width="200"/> | <img src="a2.png" width="200"/> | <img src="a3.png" width="200"/> |
 
 ## Technical Architecture
 
