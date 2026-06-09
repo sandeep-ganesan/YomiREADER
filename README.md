@@ -12,6 +12,10 @@ The application eliminates reliance on cloud APIs by running large language mode
 * **Native C++ Engine:** Powered by `llama.rn` for high-performance inference.
 * **Reader Core:** Custom themes, typography settings, and gesture-based navigation.
 
+## Screenshots
+
+| <img src="assets/a1.png" width="200"/> | <img src="assets/a2.png" width="200"/> | <img src="assets/a3.png" width="200"/> |
+
 ## Technical Architecture
 
 To maintain performance on mobile hardware, the system follows a specific pipeline:
@@ -29,7 +33,7 @@ To maintain performance on mobile hardware, the system follows a specific pipeli
 * **Parser:** `@epubjs-react-native/core`, `jszip`
 * **Storage:** `expo-file-system`, `AsyncStorage`
 
-## Installation
+## How to Build the App
 
 This project requires a native build environment and cannot run in the standard Expo Go app.
 
