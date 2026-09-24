@@ -39,7 +39,7 @@ This project requires a native build environment and cannot run in the standard 
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/usandeep-ganesan/YomiREADER.git](https://github.com/username/offline-ai-reader.git)
+   git clone [https://github.com/sandeep-ganesan/YomiREADER.git](https://github.com/sandeep-ganesan/YomiREADER.git)
    cd offline-ai-reader
    ```
 2. Install dependencies:
